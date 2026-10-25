@@ -37,19 +37,29 @@ Open your browser at `http://localhost:3000`.
 
 ## 🖼️ Screenshots
 
-> Add your actual screenshots to `public/screenshots/` and update paths if needed.
+### 1) Landing / Hero (Analyze)
 
-### Home / Upload Screen
+![ResumeLens Landing Hero](public/screenshots/home-hero.png)
 
-![Home Upload Screen](public/screenshots/home-upload.png)
+See the core product value instantly: grounded AI resume intelligence, privacy-by-design, and quick actions to analyze or try sample data.
 
-### Analysis Result Tabs
+### 2) Analyze Workspace (Upload Step)
 
-![Analysis Results](public/screenshots/analysis-results.png)
+![Analyze Workspace Upload](public/screenshots/analyze-workspace.png)
 
-### History / Compare View
+A structured 3-step flow (Upload → Configure → Results) with drag-and-drop upload and sample resumes for fast testing.
 
-![History Compare](public/screenshots/history-compare.png)
+### 3) History Page
+
+![Saved Analyses History](public/screenshots/history-page.png)
+
+Local-first saved analyses with search, sorting, and quick re-entry into analysis—without storing original uploaded files.
+
+### 4) How It Works
+
+![How ResumeLens Works](public/screenshots/how-it-works.png)
+
+A concise explanation of the product workflow: add a resume, choose your lens, and review grounded results.
 
 ## 🧰 Technologies and Frameworks
 
