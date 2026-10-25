@@ -16,6 +16,14 @@ This project provides an end-to-end document intelligence workflow:
 - View results in structured tabs
 - Save recent analyses in browser history
 
+## ⚡ One-Click Local Run
+
+```bash
+pnpm install && pnpm dev
+```
+
+Open your browser at `http://localhost:3000`.
+
 ## ✨ Key Features
 
 - PDF and `.txt` document upload
@@ -26,6 +34,22 @@ This project provides an end-to-end document intelligence workflow:
 - Result exploration via Overview, Fields, Insights, and Raw JSON tabs
 - Export actions: Copy JSON, Download JSON, Print/PDF
 - Local history with search, sorting, compare, and delete
+
+## 🖼️ Screenshots
+
+> Add your actual screenshots to `public/screenshots/` and update paths if needed.
+
+### Home / Upload Screen
+
+![Home Upload Screen](public/screenshots/home-upload.png)
+
+### Analysis Result Tabs
+
+![Analysis Results](public/screenshots/analysis-results.png)
+
+### History / Compare View
+
+![History Compare](public/screenshots/history-compare.png)
 
 ## 🧰 Technologies and Frameworks
 
@@ -56,6 +80,7 @@ This project provides an end-to-end document intelligence workflow:
 │   ├── validators/
 │   └── scoring/
 ├── public/
+│   └── screenshots/
 ├── styles/
 ├── .env.example
 └── README.md
@@ -98,6 +123,51 @@ pnpm start
 |---|---|---|
 | `GEMINI_API_KEY` | Yes (for live AI analysis) | Server-side key for Gemini API |
 | `GEMINI_MODEL` | No | Optional model override |
+
+## 🔌 API Example (`POST /api/analyze`)
+
+### Example Request (multipart/form-data)
+
+```bash
+curl -X POST "http://localhost:3000/api/analyze" \
+  -H "Accept: application/json" \
+  -F "file=@./samples/sample.pdf" \
+  -F "analysisDepth=standard" \
+  -F "summaryStyle=concise" \
+  -F "focusAreas=risks,dates,entities"
+```
+
+### Example Success Response
+
+```json
+{
+  "summary": "Contract reviewed with key risks around termination and payment terms.",
+  "extractedFields": {
+    "documentType": "Contract",
+    "effectiveDate": "2026-09-10",
+    "parties": ["Company A", "Company B"]
+  },
+  "insights": [
+    {
+      "title": "Termination Clause Risk",
+      "severity": "medium",
+      "description": "Termination notice period is shorter than standard policy."
+    }
+  ],
+  "completenessScore": 0.87,
+  "raw": {
+    "model": "gemini-3.8-flash"
+  }
+}
+```
+
+### Example Error Response
+
+```json
+{
+  "error": "Unsupported file type. Please upload PDF or TXT."
+}
+```
 
 ## 🧪 Instructions for Testing Main Features
 
