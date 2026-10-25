@@ -16,6 +16,18 @@ This project provides an end-to-end document intelligence workflow:
 - View results in structured tabs
 - Save recent analyses in browser history
 
+## 🧭 Architecture at a Glance
+
+| Layer | What it uses | Purpose |
+|---|---|---|
+| Frontend | Next.js App Router, React, TypeScript, Tailwind CSS | Upload files, configure analysis, visualize structured results |
+| Backend | Next.js API Route (`app/api/analyze/route.ts`) | Validate input, parse/extract text, orchestrate AI pipeline |
+| AI/ML | Google Gemini (`gemini-3.8-flash`) via `@google/genai` | Generate grounded summaries, fields, and insights |
+| Validation | Zod | Enforce schema-safe AI response structure |
+| Parsing | `unpdf`, browser `File.text()` | Extract text from PDF/TXT documents |
+| Storage | Browser `localStorage` | Save recent analyses locally on device |
+| Deployment | Vercel | Host and serve the app |
+
 ## ⚡ One-Click Local Run
 
 ```bash
