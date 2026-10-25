@@ -1,0 +1,9 @@
+import { NextResponse } from 'next/server'
+import { extractResumeText } from '@/lib/extract'
+import { analyzeResume } from '@/lib/gemini'
+import { completeness } from '@/lib/completeness'
+import type { AnalysisLevel, SummaryStyle } from '@/lib/schemas'
+export const maxDuration = 120
+export const runtime = 'nodejs'
+const messages: Record<string,string> = { FILE_TOO_LARGE:'Files must be 4 MB or smaller.', UNSUPPORTED_TYPE:'Upload a PDF or plain text file.', EMPTY_FILE:'That file is empty.', CORRUPT_PDF:'We could not read this PDF. Try exporting it again.', SCANNED_PDF:'This looks like a scanned PDF with no selectable text. Upload a text-based PDF.', TOO_SHORT:'This document is too short to be a resume (minimum 100 characters).', MISSING_API_KEY:'Gemini is not configured on this deployment.', RATE_LIMIT:'Gemini is busy or rate-limited. Please try again shortly.', GEMINI_FAILURE:'The AI analysis failed. Please try again.' }
+export async function POST(request: Request) { try { const form = await request.formData(); const file = form.get('file'); if (!(file instanceof File)) return NextResponse.json({ error:'Please choose a resume file.' }, { status:400 }); const level = (form.get('level') || 'standard') as AnalysisLevel; const style = (form.get('style') || 'brief') as SummaryStyle; const focus = String(form.get('focus') || 'Skills,Education,Experience,Contact').split(',').filter(Boolean); const extracted = await extractResumeText(file); const result = await analyzeResume(extracted.text, level, style, focus); return NextResponse.json({ ...result, ...extracted, completeness: completeness(result.data, result.findings) }) } catch (error) { const key = error instanceof Error ? error.message : 'GEMINI_FAILURE'; return NextResponse.json({ error: messages[key] || 'Something went wrong while analyzing this file.' }, { status: key === 'GEMINI_FAILURE' || key === 'RATE_LIMIT' ? 502 : 400 }) } }

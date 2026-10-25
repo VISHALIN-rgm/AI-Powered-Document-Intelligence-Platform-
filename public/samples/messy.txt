@@ -1,0 +1,4 @@
+ALEX RIVERA  alex.rivera@email.com
+software engineer / builder
+worked on web apps and APIs, fixed bugs, shipped things fast. React node typescript python AWS docker postgres. EDUCATION State University computer science.
+2020-now Acme-ish Co developer. before that freelance. likes solving hard problems and helping teams. projects: internal dashboard, payments integration.

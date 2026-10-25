@@ -1,0 +1,15 @@
+Maya Chen
+maya.chen@example.com | San Francisco, CA
+Senior Product Designer with 8 years of experience turning complex workflows into clear, measurable products.
+
+EXPERIENCE
+Senior Product Designer — Northstar Labs | 2021–Present
+Led design for a B2B analytics platform used by 40,000 monthly users. Partnered with product and engineering to improve activation by 28%. Mentored four designers and established a research practice.
+Product Designer — Juniper Cloud | 2017–2021
+Designed onboarding and collaboration features that reduced time-to-value by 35%.
+
+SKILLS
+Figma, FigJam, user research, prototyping, design systems, accessibility, product strategy, HTML, CSS
+
+EDUCATION
+BFA Interaction Design, California College of the Arts, 2017

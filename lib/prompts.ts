@@ -1,0 +1,5 @@
+import type { AnalysisLevel, SummaryStyle } from './schemas'
+export function buildResumePrompt(text: string, level: AnalysisLevel, style: SummaryStyle, focus: string[], repair?: string) {
+  const detail = level === 'basic' ? 'Return only name, email, top skills (up to 6), and a short summary.' : level === 'detailed' ? 'Return all fields, per-role achievements, skill categories, a grounded seniority estimate, strengths, and gaps.' : 'Return all standard fields and a useful summary.'
+  return `You are ResumeLens, a careful resume document analyst. Use ONLY information in the document below. If something is not present, return null or an empty array. Do not guess or invent facts. ${detail} Summary style: ${style}. Emphasize these focus areas: ${focus.join(', ') || 'all areas'}. Every skill and name must be copied or clearly present in the source. Return valid JSON only with keys name, email, skills, education, experience, summary, skillCategories, seniority, strengths, gaps. ${repair ? `Repair these validation errors: ${repair}` : ''}\n\nDOCUMENT:\n${text}`
+}

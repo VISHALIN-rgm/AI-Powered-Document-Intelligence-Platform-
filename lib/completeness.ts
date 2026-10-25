@@ -1,0 +1,3 @@
+import type { Analysis } from './schemas'
+import type { Finding } from './validate'
+export function completeness(a: Analysis, findings: Finding[]) { const uncertain = new Set(findings.map(f => f.field)); const rules = [['name',15,!!a.name],['email',20,!!a.email],['skills',20,a.skills.length > 0],['education',20,a.education.length > 0],['experience',25,a.experience.length > 0]] as const; const score = Math.round(rules.reduce((n,[key,weight,found]) => n + (found ? uncertain.has(key) ? weight / 2 : weight : 0), 0)); const missing = rules.filter(([, ,found]) => !found).map(([key]) => key); return { score, missing, uncertain: [...uncertain] } }
