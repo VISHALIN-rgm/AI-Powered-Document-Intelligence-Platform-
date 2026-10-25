@@ -38,15 +38,16 @@ Open your browser at `http://localhost:3000`.
 ## 🧰 Technologies and Frameworks
 
 - **Frontend:** Next.js (App Router), React, TypeScript
+- **Backend:** Next.js API Routes (`app/api/analyze/route.ts`), server-side processing in the Next.js runtime
 - **Styling/UI:** Tailwind CSS, component primitives, Framer Motion, Recharts
 - **Parsing/Validation:** `unpdf`, Zod
 - **Deployment:** Vercel
 
-## 🤖 AI Models, APIs, and Services Used
+## 🤖 AI/ML Model, APIs, and Services Used
 
-- **Google Gemini API** via `@google/genai`
-- **Default model:** `gemini-3.8-flash` (overridable via env var)
-- **Vercel** for hosting and deployment
+- **Primary AI/ML model:** `gemini-3.8-flash` (configurable via `GEMINI_MODEL`)
+- **AI API provider:** Google Gemini API via `@google/genai`
+- **Hosting/Deployment:** Vercel
 
 ## 📁 Suggested Project Structure
 
