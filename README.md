@@ -180,23 +180,30 @@ curl -X POST "http://localhost:3000/api/analyze" \
 
 ```mermaid
 flowchart TD
-    U[User Browser] --> FE[Frontend: Next.js + React]
+    U[User Browser] --> FE[Frontend Next.js React]
     FE --> API[POST /api/analyze]
 
     subgraph SERVER[Next.js Server Runtime]
-      API --> VAL[Validate file\n(type, size, content)]
-      VAL --> EXT[Extract text\nPDF: unpdf, TXT: File.text()]
-      EXT --> NORM[Normalize text\nclean + truncate]
-      NORM --> PROMPT[Build prompt + schema]
+      API --> VAL[Validate file]
+      VAL --> EXT[Extract text]
+      EXT --> NORM[Normalize text]
+      NORM --> PROMPT[Build prompt and schema]
       PROMPT --> GEMINI[Google Gemini API]
       GEMINI --> CHECK[Validate response with Zod]
-      CHECK --> SCORE[Score completeness + findings]
+      CHECK --> SCORE[Score completeness and findings]
       SCORE --> OUT[Structured result JSON]
     end
 
     OUT --> FE
-    FE --> STORE[(localStorage: recent analyses)]
+    FE --> STORE[localStorage recent analyses]
 ```
+
+### Diagram Notes
+
+- Validate file includes type, size, and content checks.
+- Extract text uses `unpdf` for PDF and `File.text()` for TXT.
+- Normalize step cleans and truncates text before prompting.
+- Response is schema-validated using Zod before scoring.
 
 ## 📡 Processing Flow
 
