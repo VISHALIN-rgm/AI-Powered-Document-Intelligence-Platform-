@@ -35,32 +35,6 @@ Open your browser at `http://localhost:3000`.
 - Export actions: Copy JSON, Download JSON, Print/PDF
 - Local history with search, sorting, compare, and delete
 
-## 🖼️ Screenshots
-
-### 1) Landing / Hero (Analyze)
-
-![ResumeLens Landing Hero](public/screenshots/home-hero.png)
-
-See the core product value instantly: grounded AI resume intelligence, privacy-by-design, and quick actions to analyze or try sample data.
-
-### 2) Analyze Workspace (Upload Step)
-
-![Analyze Workspace Upload](public/screenshots/analyze-workspace.png)
-
-A structured 3-step flow (Upload → Configure → Results) with drag-and-drop upload and sample resumes for fast testing.
-
-### 3) History Page
-
-![Saved Analyses History](public/screenshots/history-page.png)
-
-Local-first saved analyses with search, sorting, and quick re-entry into analysis—without storing original uploaded files.
-
-### 4) How It Works
-
-![How ResumeLens Works](public/screenshots/how-it-works.png)
-
-A concise explanation of the product workflow: add a resume, choose your lens, and review grounded results.
-
 ## 🧰 Technologies and Frameworks
 
 - **Frontend:** Next.js (App Router), React, TypeScript
@@ -90,7 +64,6 @@ A concise explanation of the product workflow: add a resume, choose your lens, a
 │   ├── validators/
 │   └── scoring/
 ├── public/
-│   └── screenshots/
 ├── styles/
 ├── .env.example
 └── README.md
@@ -203,26 +176,26 @@ curl -X POST "http://localhost:3000/api/analyze" \
    - Compare entries
    - Delete entries
 
-## 🏗️ Clear Architecture Diagram
+## 🏗️ Architecture Diagram
 
 ```mermaid
-flowchart LR
-    U[User Browser] --> FE[Next.js Frontend\n(App Router + React UI)]
-    FE -->|Upload file + analysis options| API[API Route\nPOST /api/analyze]
+flowchart TD
+    U[User Browser] --> FE[Frontend: Next.js + React]
+    FE --> API[POST /api/analyze]
 
-    subgraph S[Next.js Server Runtime]
-      API --> V[Input Validator\n(type / size / content)]
-      V --> X[Text Extractor\nPDF: unpdf\nTXT: File.text()]
-      X --> N[Text Normalizer\nclean + truncate]
-      N --> PB[Prompt Builder + JSON Schema]
-      PB --> GM[Google Gemini API\n@google/genai]
-      GM --> ZV[Schema Validation\nZod]
-      ZV --> SC[Scoring Engine\ncompleteness + findings]
-      SC --> RES[Structured Analysis JSON]
+    subgraph SERVER[Next.js Server Runtime]
+      API --> VAL[Validate file\n(type, size, content)]
+      VAL --> EXT[Extract text\nPDF: unpdf, TXT: File.text()]
+      EXT --> NORM[Normalize text\nclean + truncate]
+      NORM --> PROMPT[Build prompt + schema]
+      PROMPT --> GEMINI[Google Gemini API]
+      GEMINI --> CHECK[Validate response with Zod]
+      CHECK --> SCORE[Score completeness + findings]
+      SCORE --> OUT[Structured result JSON]
     end
 
-    RES --> FE
-    FE --> LS[(Browser localStorage\nRecent Analyses)]
+    OUT --> FE
+    FE --> STORE[(localStorage: recent analyses)]
 ```
 
 ## 📡 Processing Flow
