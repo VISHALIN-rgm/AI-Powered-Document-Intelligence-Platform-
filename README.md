@@ -2,6 +2,10 @@
 
 An AI-driven platform for uploading and analyzing documents (PDF/TXT) with structured insights, extraction quality checks, and an interactive results dashboard.
 
+## 🌐 Live Demo
+
+- **Production URL:** https://resumelens-development-h6a7y8pss-kvishalini2-5224s-projects.vercel.app/
+
 ## 🚀 Overview
 
 This project provides an end-to-end document intelligence workflow:
@@ -23,13 +27,18 @@ This project provides an end-to-end document intelligence workflow:
 - Export actions: Copy JSON, Download JSON, Print/PDF
 - Local history with search, sorting, compare, and delete
 
-## 🧰 Tech Stack
+## 🧰 Technologies and Frameworks
 
 - **Frontend:** Next.js (App Router), React, TypeScript
 - **Styling/UI:** Tailwind CSS, component primitives, Framer Motion, Recharts
 - **Parsing/Validation:** `unpdf`, Zod
-- **AI Engine:** Google Gemini (`@google/genai`)
-- **Deployment:** Vercel-ready
+- **Deployment:** Vercel
+
+## 🤖 AI Models, APIs, and Services Used
+
+- **Google Gemini API** via `@google/genai`
+- **Default model:** `gemini-3.8-flash` (overridable via env var)
+- **Vercel** for hosting and deployment
 
 ## 📁 Suggested Project Structure
 
@@ -52,97 +61,107 @@ This project provides an end-to-end document intelligence workflow:
 └── README.md
 ```
 
-## ⚙️ Setup
+## ⚙️ Setup and Execution Instructions
 
-1. Install dependencies
+### 1) Install dependencies
 
 ```bash
 pnpm install
 ```
 
-2. Configure environment
+### 2) Configure environment
 
 ```bash
 cp .env.example .env.local
 ```
 
-Add your Gemini key:
+Then set required values in `.env.local`.
 
-```env
-GEMINI_API_KEY=your_key_here
-GEMINI_MODEL=gemini-3.8-flash
-```
-
-3. Run development server
+### 3) Start development server
 
 ```bash
 pnpm dev
 ```
 
-4. Build for production
+Open your browser at `http://localhost:3000`.
+
+### 4) Build and run production mode locally
 
 ```bash
 pnpm build
 pnpm start
 ```
 
-## 🔐 Environment Variables
+## 🔐 Required Environment Variables (names only)
 
 | Name | Required | Description |
 |---|---|---|
-| `GEMINI_API_KEY` | Yes (for live AI) | Server-side key for Gemini API |
+| `GEMINI_API_KEY` | Yes (for live AI analysis) | Server-side key for Gemini API |
 | `GEMINI_MODEL` | No | Optional model override |
 
-## 🧪 Manual Smoke Test Checklist
+## 🧪 Instructions for Testing Main Features
 
-- Analyze all sample documents
-- Test each analysis level and summary style
-- Verify tab outputs and JSON export actions
-- Upload valid/invalid files and check error handling
-- Validate local history actions (search, compare, delete)
+### Manual test checklist
 
-## 🏗️ Architecture Diagram
+1. Upload a valid PDF and run analysis.
+2. Upload a valid `.txt` file and run analysis.
+3. Try invalid files (unsupported type / oversized / empty content) and verify error messages.
+4. Test all analysis depth modes (`basic`, `standard`, `detailed`).
+5. Test different summary styles/focus options and compare output.
+6. Verify all result tabs render correctly:
+   - Overview
+   - Fields
+   - Insights
+   - Raw JSON
+7. Verify export actions:
+   - Copy JSON
+   - Download JSON
+   - Print/PDF
+8. Verify local history features:
+   - Save recent runs
+   - Search/sort
+   - Compare entries
+   - Delete entries
+
+## 🏗️ Clear Architecture Diagram
 
 ```mermaid
-flowchart TD
-    U[User] --> UI[Next.js Frontend]
+flowchart LR
+    U[User Browser] --> FE[Next.js Frontend\n(App Router + React UI)]
+    FE -->|Upload file + analysis options| API[API Route\nPOST /api/analyze]
 
-    subgraph Browser[Client Browser]
-        UI --> LS[(localStorage\nRecent Analyses)]
+    subgraph S[Next.js Server Runtime]
+      API --> V[Input Validator\n(type / size / content)]
+      V --> X[Text Extractor\nPDF: unpdf\nTXT: File.text()]
+      X --> N[Text Normalizer\nclean + truncate]
+      N --> PB[Prompt Builder + JSON Schema]
+      PB --> GM[Google Gemini API\n@google/genai]
+      GM --> ZV[Schema Validation\nZod]
+      ZV --> SC[Scoring Engine\ncompleteness + findings]
+      SC --> RES[Structured Analysis JSON]
     end
 
-    UI -->|Upload + Options| API[POST /api/analyze]
-
-    subgraph Server[Next.js Server Runtime]
-        API --> V[File Validation\n(type/size/content)]
-        V --> E[Text Extraction\nPDF: unpdf | TXT: File.text]
-        E --> N[Normalization\n(clean + truncate)]
-        N --> P[Prompt Builder + JSON Schema]
-        P --> G[Google Gemini API]
-        G --> Z[Zod Validation]
-        Z --> S[Scoring Engine\n(completeness + findings)]
-    end
-
-    S --> R[Structured Result JSON]
-    R --> UI
+    RES --> FE
+    FE --> LS[(Browser localStorage\nRecent Analyses)]
 ```
 
 ## 📡 Processing Flow
 
-1. User uploads a document and selects analysis options.
-2. Backend validates file constraints.
-3. Text is extracted and normalized.
+1. User uploads document and selects analysis options.
+2. API route validates file constraints.
+3. Server extracts and normalizes text.
 4. Prompt + schema are sent to Gemini.
-5. AI response is validated and scored.
-6. Structured result is rendered in UI and optionally stored in local history.
+5. Response is validated and scored.
+6. Structured results are returned to UI and optionally persisted in local browser history.
 
-## ⚠️ Current Limitations
+## ⚠️ Known Limitations / Incomplete Features
 
-- Supports PDF/TXT only (no DOCX support yet)
+- Supports **PDF** and **TXT** only (no DOCX yet)
 - File size and text-length limits apply
-- Scanned image-only PDFs require OCR (not included)
-- History is browser-local (not synced)
-- AI output quality depends on model availability and input quality
+- Scanned image-only PDFs require OCR (not yet implemented)
+- History is browser-local (not synced to cloud/account)
+- AI output quality depends on model behavior and input quality
+- Automated unit/integration test suite is not yet fully implemented
 
 ## 🛣️ Roadmap
 
@@ -154,4 +173,4 @@ flowchart TD
 
 ## 📄 License
 
-Add your preferred license (e.g., MIT) in a `LICENSE` file.
+Add your preferred license (for example, MIT) in a `LICENSE` file.
